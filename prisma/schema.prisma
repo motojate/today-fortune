@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ENUM 정의
+enum FortuneType {
+  SUCCESS
+  WINNING
+  MONEY
+}
+
+enum FortuneStatus {
+  GOOD
+  AVERAGE
+  BAD
+}
+
+// MODEL 정의
+// TD_FT : TODAY_FORTUNE
+model User {
+  id        Int                  @id @default(autoincrement())
+  userId    String               @unique @map("user_id")
+  password  String
+  createdAt DateTime             @default(now()) @map("created_at")
+  updatedAt DateTime             @updatedAt @map("updated_at")
+  fortunes  UserFortuneMapping[]
+
+  @@map("TD_FT_USER")
+}
+
+model Fortune {
+  id            Int                  @id @default(autoincrement())
+  content       String
+  fortuneType   FortuneType          @map("fortune_type")
+  fortuneStatus FortuneStatus        @map("fortune_status")
+  createdAt     DateTime             @default(now()) @map("created_at")
+  updatedAt     DateTime             @updatedAt @map("updated_at")
+  users         UserFortuneMapping[]
+
+  @@map("TD_FT_FORTUNE")
+}
+
+model UserFortuneMapping {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  fortuneId Int      @map("fortune_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fortune   Fortune  @relation(fields: [fortuneId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("TD_FT_USER_FORTUNE_MAPPING")
+}
