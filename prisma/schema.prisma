@@ -57,6 +57,6 @@ model UserFortuneMapping {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   fortune   Fortune  @relation(fields: [fortuneId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
+  @@index([userId, createdAt])
   @@map("TD_FT_USER_FORTUNE_MAPPING")
 }
