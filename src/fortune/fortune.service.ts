@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/shared/prisma/prisma.service';
 import * as dayjs from 'dayjs';
-import { Fortune, FortuneStatus, FortuneType } from '@prisma/client';
+import { Code, CodeFields, Fortune } from '@prisma/client';
+import { CodeService } from 'src/code/code.service';
+import { getRandomIndexByList } from 'src/shared/utils/data-handle.util';
 
 @Injectable()
 export class FortuneService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly codeService: CodeService,
+  ) {}
 
   async checkTodayFortuneAvailability() {
     const todayStart = dayjs().startOf('day');
@@ -29,31 +34,30 @@ export class FortuneService {
     } catch (e) {}
   }
 
-  private getFortuneStatus(): FortuneStatus {
-    const randomNumber: number = Math.floor(Math.random() * 3) + 1;
-    const fortuneStatusMapper: { [key in number]: FortuneStatus } = {
-      1: 'BAD',
-      2: 'AVERAGE',
-      3: 'GOOD',
-    };
-    return fortuneStatusMapper[randomNumber];
+  private async getFortuneStatus(): Promise<Code> {
+    const fortuneStatusList = await this.codeService.getCodeByCategory(
+      'FORTUNE_STATUS',
+    );
+    const randomIndex: number = getRandomIndexByList(fortuneStatusList.length);
+    return fortuneStatusList[randomIndex];
   }
 
-  private async getRandomFortuneId(fortuneType: FortuneType): Promise<Fortune> {
-    const fortuneStatus: FortuneStatus = this.getFortuneStatus();
+  private async getRandomFortuneId(fortuneType: CodeFields): Promise<Fortune> {
     try {
+      const fortuneStatusCode = await this.getFortuneStatus();
+
       const fortuneList = await this.prisma.fortune.findMany({
         where: {
-          fortuneStatus,
+          fortuneStatus: fortuneStatusCode.code,
           fortuneType,
         },
       });
-      const randomIndex = Math.floor(Math.random() * fortuneList.length);
+      const randomIndex = getRandomIndexByList(fortuneList.length);
       return fortuneList[randomIndex];
     } catch (e) {}
   }
 
-  async createTodayFortune(dto: { userId: number; fortuneType: FortuneType }) {
+  async createTodayFortune(dto: { userId: number; fortuneType: CodeFields }) {
     try {
       const fortune = await this.getRandomFortuneId(dto.fortuneType);
       await this.prisma.userFortuneMapping.create({
