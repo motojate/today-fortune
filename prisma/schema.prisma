@@ -66,21 +66,20 @@ model UserFortuneMapping {
 }
 
 model Code {
-  code           CodeFields   @id @unique
+  code           CodeFields         @id @unique
   name           String
-  categoryId     Int          @map("category_id")
-  createdAt      DateTime     @default(now()) @map("created_at")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  typeFortunes   Fortune[]    @relation(name: "FortuneTypeRelation")
-  statusFortunes Fortune[]    @relation(name: "FortuneStatusRelation")
-  category       CodeCategory @relation(fields: [categoryId], references: [id])
+  categoryName   CodeCategoryFields @map("category_name")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+  typeFortunes   Fortune[]          @relation(name: "FortuneTypeRelation")
+  statusFortunes Fortune[]          @relation(name: "FortuneStatusRelation")
+  category       CodeCategory       @relation(fields: [categoryName], references: [name])
 
   @@map("TD_FT_CODE")
 }
 
 model CodeCategory {
-  id   Int                @id @default(autoincrement())
-  name CodeCategoryFields
+  name CodeCategoryFields @id @unique
   code Code[]
 
   @@map("TD_FT_CODE_CATEGORY")
