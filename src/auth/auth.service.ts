@@ -25,12 +25,12 @@ export class AuthService {
     try {
       const user = await this.userService.findUniqueByUserId(dto.userId);
       if (!user) throw new InvalidAuthException();
-
       const isValidPassword = await bcrypt.compare(dto.password, user.password);
       if (!isValidPassword) throw new InvalidPasswordException();
-
       return user;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   async login(dto: LoginAuthDto): Promise<{ accessToken: string }> {
