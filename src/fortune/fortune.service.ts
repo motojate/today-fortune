@@ -4,6 +4,8 @@ import * as dayjs from 'dayjs';
 import { Code, CodeFields, Fortune } from '@prisma/client';
 import { CodeService } from 'src/code/code.service';
 import { getRandomIndexByList } from 'src/shared/utils/data-handle.util';
+import { PrismaException } from 'src/shared/exceptions/prisma.exception';
+import { BaseResponse } from 'src/shared/responses/base.response';
 
 @Injectable()
 export class FortuneService {
@@ -12,14 +14,14 @@ export class FortuneService {
     private readonly codeService: CodeService,
   ) {}
 
-  async checkTodayFortuneAvailability() {
+  async checkTodayFortuneAvailability(id: number) {
     const todayStart = dayjs().startOf('day');
     const tomorrowStart = dayjs().add(1, 'day').startOf('day');
 
     try {
       const fortune = await this.prisma.userFortuneMapping.findFirst({
         where: {
-          userId: 1,
+          userId: id,
           createdAt: {
             gte: todayStart.toDate(),
             lt: tomorrowStart.toDate(),
@@ -29,9 +31,11 @@ export class FortuneService {
           fortune: true,
         },
       });
-
-      return fortune;
-    } catch (e) {}
+      if (fortune) return BaseResponse.success(fortune);
+      else return BaseResponse.emptyData(null);
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 
   private async getFortuneStatus(): Promise<Code> {
@@ -54,7 +58,9 @@ export class FortuneService {
       });
       const randomIndex = getRandomIndexByList(fortuneList.length);
       return fortuneList[randomIndex];
-    } catch (e) {}
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 
   async createTodayFortune(dto: { userId: number; fortuneType: CodeFields }) {
@@ -74,7 +80,9 @@ export class FortuneService {
           },
         },
       });
-      return fortune;
-    } catch (e) {}
+      return BaseResponse.success(fortune);
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { BaseException } from './base.exception';
+import { BaseException } from 'src/shared/exceptions/base.exception';
 import { ERROR_CODES } from 'src/shared/utils/response.util';
 
 export class NullTokenException extends BaseException {

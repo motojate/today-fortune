@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Code, CodeCategoryFields } from '@prisma/client';
+import { PrismaException } from 'src/shared/exceptions/prisma.exception';
 import { PrismaService } from 'src/shared/prisma/prisma.service';
 
 @Injectable()
@@ -17,6 +18,8 @@ export class CodeService {
         },
       });
       return codes;
-    } catch (e) {}
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 }

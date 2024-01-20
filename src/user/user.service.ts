@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { PrismaException } from 'src/shared/exceptions/prisma.exception';
 import { PrismaService } from 'src/shared/prisma/prisma.service';
 
 @Injectable()
@@ -13,7 +14,9 @@ export class UserService {
           id,
         },
       });
-    } catch (e) {}
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 
   async findUniqueByUserId(userId: string): Promise<User> {
@@ -23,6 +26,8 @@ export class UserService {
           userId,
         },
       });
-    } catch (e) {}
+    } catch (e) {
+      throw new PrismaException(e);
+    }
   }
 }
