@@ -79,8 +79,10 @@ model Code {
 }
 
 model CodeCategory {
-  name CodeCategoryFields @id @unique
-  code Code[]
+  name      CodeCategoryFields @id @unique
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+  Code      Code[]
 
   @@map("TD_FT_CODE_CATEGORY")
 }
