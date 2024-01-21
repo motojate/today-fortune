@@ -27,7 +27,12 @@ export class FortuneService {
           },
         },
         select: {
-          fortune: true,
+          fortune: {
+            include: {
+              type: true,
+              status: true,
+            },
+          },
         },
       });
       return fortune;
@@ -52,6 +57,10 @@ export class FortuneService {
         where: {
           fortuneStatus: fortuneStatusCode.code,
           fortuneType,
+        },
+        include: {
+          status: true,
+          type: true,
         },
       });
       const randomIndex = getRandomIndexByList(fortuneList.length);
@@ -78,6 +87,7 @@ export class FortuneService {
           },
         },
       });
+
       return fortune;
     } catch (e) {
       throw new PrismaException(e);
