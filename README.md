@@ -127,7 +127,7 @@ $ yarn prisma db seed (초기 데이터 삽입)
 
 공용 response
 
-```json
+```jsonc
 {
   "code": "정의한 코드 - number",
   "result": "결과값 - 에러타입 혹은 반환값의 타입"
@@ -216,7 +216,7 @@ $ yarn prisma db seed (초기 데이터 삽입)
   유저가 선택한 종류의 운세 종류로 오늘의 운세를 만들어주는 api.
   운세의 상태(GOOD, AVERAGE, BAD)의 값에 따라 균등하게 계산하여 나온 운세와 로그인한 유저 아이디를 매핑 테이블에 생성.
 
-```json
+```jsonc
 {
   "code": 1000,
   "result": {
@@ -229,3 +229,7 @@ $ yarn prisma db seed (초기 데이터 삽입)
   }
 }
 ```
+
+## Usecase Diagram
+![use-case](https://github.com/motojate/today-fortune/assets/120537554/61d0b7ae-f021-4e39-97c5-b8bc90991c30)
+
