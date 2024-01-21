@@ -169,11 +169,40 @@ $ yarn prisma db seed (초기 데이터 삽입)
 
 > 코드에 관한 도메인
 
-- @GET/ 'api/code/today-fortune'
+- @GET/ 'api/code/fortune-type'
 - @Param: x
 - @Header: access_token 쿠키 필요
   화면에 오늘의 운세에 관련하여 재물운, 성공운, 당첨운과 같은 데이터를 보여주기 위한 api
   서비스 로직에서 카테고리 별 코드를 가지고 온 후 가지고 온 값을 리턴해준다.
+
+```jsonc
+{
+  "code": 1000,
+  "result": [
+    {
+      "code": "SUCCESS",
+      "name": "성공",
+      "categoryName": "FORTUNE_TYPE",
+      "createdAt": "2024-01-21T02:53:10.599Z",
+      "updatedAt": "2024-01-21T02:53:10.599Z"
+    },
+    {
+      "code": "WINNING",
+      "name": "당첨",
+      "categoryName": "FORTUNE_TYPE",
+      "createdAt": "2024-01-21T02:53:10.599Z",
+      "updatedAt": "2024-01-21T02:53:10.599Z"
+    },
+    {
+      "code": "MONEY",
+      "name": "재물",
+      "categoryName": "FORTUNE_TYPE",
+      "createdAt": "2024-01-21T02:53:10.599Z",
+      "updatedAt": "2024-01-21T02:53:10.599Z"
+    }
+  ]
+}
+```
 
 ### Fortune
 
@@ -231,5 +260,5 @@ $ yarn prisma db seed (초기 데이터 삽입)
 ```
 
 ## Usecase Diagram
-![use-case](https://github.com/motojate/today-fortune/assets/120537554/61d0b7ae-f021-4e39-97c5-b8bc90991c30)
 
+![use-case](https://github.com/motojate/today-fortune/assets/120537554/61d0b7ae-f021-4e39-97c5-b8bc90991c30)

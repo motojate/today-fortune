@@ -13,9 +13,6 @@ export class CodeService {
         where: {
           categoryName: category,
         },
-        include: {
-          category: true,
-        },
       });
       return codes;
     } catch (e) {
