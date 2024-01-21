@@ -122,3 +122,110 @@ $ yarn prisma db seed (초기 데이터 삽입)
 | name      | CodeCategoryFields (enum) | 고유 코드 식별자 (PK) |
 | createdAt | DateTime                  | 생성 시간             |
 | updatedAt | DateTime                  | 수정 시간             |
+
+## API Docs
+
+공용 response
+
+```json
+{
+    "code": "정의한 코드 - number",
+}   "result": "결과값 - 에러타입 혹은 반환값의 타입"
+```
+
+### 응답 코드
+
+| Http-Status | Code | Description                     |
+| ----------- | ---- | ------------------------------- |
+| 200         | 1000 | 요청 성공                       |
+| 200         | 1001 | 요청은 성공했지만 데이터가 없음 |
+
+### 에러 코드
+
+| Http-Status | Code | Description                       |
+| ----------- | ---- | --------------------------------- |
+| 400         | 2000 | 요청값 오류 - Bad Request         |
+| 500         | 2001 | 서버 에러 - Internal Server Error |
+| 401         | 3001 | 유효하지 않은 유저 정보           |
+| 401         | 3002 | 비밀번호 미일치                   |
+| 401         | 5000 | 토큰이 없는 경우                  |
+| 401         | 5001 | 유효하지 않은 토큰                |
+| 401         | 5002 | Jwt Access 토큰 만료              |
+| -           | 9000 | 정의되자 않은 에러 코드           |
+
+### Auth
+
+> 유저 인증에 관한 도메인
+
+- @POST/ 'api/auth/login'
+- @Body: { userId, password }
+  유저에 대하여 로그인을 처리하는 api
+  서비스 로직에서 validateUser 메서드를 통해 유저에 대하여 검증을 진행하고,
+  검증이 완료된 경우, httpOnly 속성을 갖는 Jwt 토큰을 cookie에 넣는다.
+  이 때, payload에 넣는 값은 로그인 한 유저의 id 값을 넣는다.
+
+### Code
+
+> 코드에 관한 도메인
+
+- @GET/ 'api/code/today-fortune'
+- @Param: x
+- @Header: access_token 쿠키 필요
+  화면에 오늘의 운세에 관련하여 재물운, 성공운, 당첨운과 같은 데이터를 보여주기 위한 api
+  서비스 로직에서 카테고리 별 코드를 가지고 온 후 가지고 온 값을 리턴해준다.
+
+### Fortune
+
+> 오늘의 운세에 관한 도메인
+
+- @GET/ 'api/fortune'
+- @Param: x
+- @Header: access_token 쿠키 필요
+  유저가 오늘 확인한 오늘의 운세가 있는지 확인하기 위한 api
+  확인한 결과가 있다면, 해당 운세를 리턴, 없으면 코드 1001, 결과값을 null 리턴해준다.
+
+```json
+오늘 운세를 확인한 경우
+{
+    "code": 1000,
+    "result": {
+        "fortune": {
+            "id": 5,
+            "content": "운세 2",
+            "fortuneType": "SUCCESS",
+            "fortuneStatus": "GOOD",
+            "createdAt": "2024-01-21T02:53:10.605Z",
+            "updatedAt": "2024-01-21T02:53:10.605Z"
+        }
+    },
+}
+```
+
+```json
+오늘 운세를 확인하지 않은 경우
+{
+    "code": 1001,
+    "result": null,
+
+}
+```
+
+- @POST/ 'api/fortune/create'
+- @Body: { fortuneType - SUCCESS, MONEY, WINNING }
+- @Header: access_token 쿠키 필요
+  유저가 선택한 종류의 운세 종류로 오늘의 운세를 만들어주는 api.
+  운세의 상태(GOOD, AVERAGE, BAD)의 값에 따라 균등하게 계산하여 나온 운세와 로그인한 유저 아이디를 매핑 테이블에 생성.
+
+```json
+{
+    "code": 1000,
+    "result": {
+        "id": 3,
+        "content": "운세 3",
+        "fortuneType": "SUCCESS",
+        "fortuneStatus": "BAD",
+        "createdAt": "2024-01-21T02:53:10.605Z",
+        "updatedAt": "2024-01-21T02:53:10.605Z"
+    },
+}
+```
