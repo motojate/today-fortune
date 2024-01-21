@@ -5,7 +5,6 @@ import { Code, CodeFields, Fortune } from '@prisma/client';
 import { CodeService } from 'src/code/code.service';
 import { getRandomIndexByList } from 'src/shared/utils/data-handle.util';
 import { PrismaException } from 'src/shared/exceptions/prisma.exception';
-import { BaseResponse } from 'src/shared/responses/base.response';
 
 @Injectable()
 export class FortuneService {
@@ -31,8 +30,7 @@ export class FortuneService {
           fortune: true,
         },
       });
-      if (fortune) return BaseResponse.success(fortune);
-      else return BaseResponse.emptyData(null);
+      return fortune;
     } catch (e) {
       throw new PrismaException(e);
     }
@@ -80,7 +78,7 @@ export class FortuneService {
           },
         },
       });
-      return BaseResponse.success(fortune);
+      return fortune;
     } catch (e) {
       throw new PrismaException(e);
     }
