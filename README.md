@@ -13,7 +13,7 @@ $ yarn start
 
 ## Database Setting
 
-- 데이터베이스 : MySQL
+- 데이터베이스 : MariaDB
 - 환경 : 로컬
 
 ## Database Init
@@ -127,10 +127,11 @@ $ yarn prisma db seed (초기 데이터 삽입)
 
 공용 response
 
-```json
+```jsonc
 {
-    "code": "정의한 코드 - number",
-}   "result": "결과값 - 에러타입 혹은 반환값의 타입"
+  "code": "정의한 코드 - number",
+  "result": "결과값 - 에러타입 혹은 반환값의 타입"
+}
 ```
 
 ### 응답 코드
@@ -184,7 +185,7 @@ $ yarn prisma db seed (초기 데이터 삽입)
   유저가 오늘 확인한 오늘의 운세가 있는지 확인하기 위한 api
   확인한 결과가 있다면, 해당 운세를 리턴, 없으면 코드 1001, 결과값을 null 리턴해준다.
 
-```json
+```jsonc
 오늘 운세를 확인한 경우
 {
     "code": 1000,
@@ -201,12 +202,11 @@ $ yarn prisma db seed (초기 데이터 삽입)
 }
 ```
 
-```json
+```jsonc
 오늘 운세를 확인하지 않은 경우
 {
     "code": 1001,
     "result": null,
-
 }
 ```
 
@@ -216,16 +216,20 @@ $ yarn prisma db seed (초기 데이터 삽입)
   유저가 선택한 종류의 운세 종류로 오늘의 운세를 만들어주는 api.
   운세의 상태(GOOD, AVERAGE, BAD)의 값에 따라 균등하게 계산하여 나온 운세와 로그인한 유저 아이디를 매핑 테이블에 생성.
 
-```json
+```jsonc
 {
-    "code": 1000,
-    "result": {
-        "id": 3,
-        "content": "운세 3",
-        "fortuneType": "SUCCESS",
-        "fortuneStatus": "BAD",
-        "createdAt": "2024-01-21T02:53:10.605Z",
-        "updatedAt": "2024-01-21T02:53:10.605Z"
-    },
+  "code": 1000,
+  "result": {
+    "id": 3,
+    "content": "운세 3",
+    "fortuneType": "SUCCESS",
+    "fortuneStatus": "BAD",
+    "createdAt": "2024-01-21T02:53:10.605Z",
+    "updatedAt": "2024-01-21T02:53:10.605Z"
+  }
 }
 ```
+
+## Usecase Diagram
+![use-case](https://github.com/motojate/today-fortune/assets/120537554/61d0b7ae-f021-4e39-97c5-b8bc90991c30)
+
