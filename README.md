@@ -220,14 +220,28 @@ $ yarn prisma db seed (초기 데이터 삽입)
     "code": 1000,
     "result": {
         "fortune": {
-            "id": 5,
+            "id": 8,
             "content": "운세 2",
             "fortuneType": "SUCCESS",
-            "fortuneStatus": "GOOD",
+            "fortuneStatus": "AVERAGE",
             "createdAt": "2024-01-21T02:53:10.605Z",
-            "updatedAt": "2024-01-21T02:53:10.605Z"
+            "updatedAt": "2024-01-21T02:53:10.605Z",
+            "type": {
+                "code": "SUCCESS",
+                "name": "성공",
+                "categoryName": "FORTUNE_TYPE",
+                "createdAt": "2024-01-21T02:53:10.599Z",
+                "updatedAt": "2024-01-21T02:53:10.599Z"
+            },
+            "status": {
+                "code": "AVERAGE",
+                "name": "보통",
+                "categoryName": "FORTUNE_STATUS",
+                "createdAt": "2024-01-21T02:53:10.599Z",
+                "updatedAt": "2024-01-21T02:53:10.599Z"
+            }
         }
-    },
+    }
 }
 ```
 
@@ -249,12 +263,26 @@ $ yarn prisma db seed (초기 데이터 삽입)
 {
   "code": 1000,
   "result": {
-    "id": 3,
-    "content": "운세 3",
+    "id": 2,
+    "content": "운세 2",
     "fortuneType": "SUCCESS",
     "fortuneStatus": "BAD",
     "createdAt": "2024-01-21T02:53:10.605Z",
-    "updatedAt": "2024-01-21T02:53:10.605Z"
+    "updatedAt": "2024-01-21T02:53:10.605Z",
+    "status": {
+      "code": "BAD",
+      "name": "나쁨",
+      "categoryName": "FORTUNE_STATUS",
+      "createdAt": "2024-01-21T02:53:10.599Z",
+      "updatedAt": "2024-01-21T02:53:10.599Z"
+    },
+    "type": {
+      "code": "SUCCESS",
+      "name": "성공",
+      "categoryName": "FORTUNE_TYPE",
+      "createdAt": "2024-01-21T02:53:10.599Z",
+      "updatedAt": "2024-01-21T02:53:10.599Z"
+    }
   }
 }
 ```
